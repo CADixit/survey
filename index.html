@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Life Style Questionnaire</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        fieldset { margin-bottom: 20px; }
+        .score-message { font-weight: bold; color: green; margin-top: 20px; }
+    </style>
+    <script>
+        function calculateScore(event) {
+            event.preventDefault(); // Prevents form submission
+
+            const form = document.forms["lifestyleForm"];
+            let score = 0;
+            let unanswered = [];
+
+            // Validate and sum radio groups
+            for (let i = 1; i <= 12; i++) {
+                const q = form["q" + i];
+                if (!q) continue;
+                if (q[0]?.type === "radio") {
+                    let answered = false;
+                    for (const radio of q) {
+                        if (radio.checked) {
+                            score += parseInt(radio.value) || 0;
+                            answered = true;
+                        }
+                    }
+                    if (!answered && i !== 12) unanswered.push(i);
+                }
+            }
+
+            // Sum checkboxes
+            ["q3", "q4", "q5", "q8", "q9", "q10"].forEach(name => {
+                let checked = false;
+                form.querySelectorAll(`input[name="${name}"]:checked`).forEach(input => {
+                    score += parseInt(input.value) || 0;
+                    checked = true;
+                });
+                // Optionally require at least one checkbox
+                // if (!checked) unanswered.push(name.replace('q',''));
+            });
+
+            if (unanswered.length) {
+                document.getElementById("scoreMessage").textContent = "Please answer all required questions (" + unanswered.join(", ") + ").";
+                return;
+            }
+
+            document.getElementById("scoreMessage").textContent = "Your lifestyle score is: " + score;
+        }
+    </script>
+</head>
+<body>
+
+<h1>Life Style Questionnaire</h1>
+
+<form name="lifestyleForm" onsubmit="calculateScore(event)">
+
+    <p>1. How many meals in a week you eat outside?</p>
+    <label><input type="radio" name="q1" value="1"> One</label><br>
+    <label><input type="radio" name="q1" value="2"> Two</label><br>
+    <label><input type="radio" name="q1" value="3"> Three</label><br>
+    <label><input type="radio" name="q1" value="5"> Almost everyday</label><br>
+    <label><input type="radio" name="q1" value="0"> Not at all</label><br>
+
+    <p>2. For how many days do you store cooked food in the refrigerator?</p>
+    <label><input type="radio" name="q2" value="1"> One day</label><br>
+    <label><input type="radio" name="q2" value="2"> Two days</label><br>
+    <label><input type="radio" name="q2" value="3"> Three days to a week</label><br>
+    <label><input type="radio" name="q2" value="4"> Freeze it for longer stay</label><br>
+    <label><input type="radio" name="q2" value="0"> Don't have refrigerator</label><br>
+
+    <p>3. Which gadgets do you use in the kitchen?</p>
+    <label><input type="checkbox" name="q3" value="1"> Mixer grinder</label><br>
+    <label><input type="checkbox" name="q3" value="2"> Microwave</label><br>
+    <label><input type="checkbox" name="q3" value="2"> Oven</label><br>
+    <label><input type="checkbox" name="q3" value="1"> Beater</label><br>
+    <label><input type="checkbox" name="q3" value="3"> Dehydrator</label><br>
+    <label><input type="checkbox" name="q3" value="2"> Dishwasher</label><br>
+    <label><input type="checkbox" name="q3" value="5"> Solar cooker</label><br>
+    <label><input type="checkbox" name="q3" value="1"> Other</label><br>
+
+    <p>4. Which of the following cookwares do you use in the kitchen?</p>
+    <label><input type="checkbox" name="q4" value="1"> Stainless Steel</label><br>
+    <label><input type="checkbox" name="q4" value="1"> Cast-iron</label><br>
+    <label><input type="checkbox" name="q4" value="2"> Non stick cookware</label><br>
+    <label><input type="checkbox" name="q4" value="1"> Glass</label><br>
+    <label><input type="checkbox" name="q4" value="3"> Plastic</label><br>
+    <label><input type="checkbox" name="q4" value="1"> Other</label><br>
+
+    <p>5. What do you purchase online?</p>
+    <label><input type="checkbox" name="q5" value="1"> Grocery</label><br>
+    <label><input type="checkbox" name="q5" value="1"> Books</label><br>
+    <label><input type="checkbox" name="q5" value="1"> Clothes</label><br>
+    <label><input type="checkbox" name="q5" value="1"> Electronic goods</label><br>
+    <label><input type="checkbox" name="q5" value="1"> Other</label><br>
+
+    <p>6. How many times a month do you buy stuff online?</p>
+    <label><input type="radio" name="q6" value="1"> Once</label><br>
+    <label><input type="radio" name="q6" value="2"> Twice</label><br>
+    <label><input type="radio" name="q6" value="3"> Three times</label><br>
+    <label><input type="radio" name="q6" value="4"> More</label><br>
+
+    <p>7. What is your method of wet waste management?</p>
+    <label><input type="radio" name="q7" value="3"> Composting</label><br>
+    <label><input type="radio" name="q7" value="2"> Separate disposal</label><br>
+    <label><input type="radio" name="q7" value="1"> Not sure what happens</label><br>
+
+    <p>8. What is your way of warming water for bathing?</p>
+    <label><input type="checkbox" name="q8" value="1"> Geyser</label><br>
+    <label><input type="checkbox" name="q8" value="2"> Hot rod</label><br>
+    <label><input type="checkbox" name="q8" value="5"> Solar power</label><br>
+    <label><input type="checkbox" name="q8" value="3"> Use cold water</label><br>
+    <label><input type="checkbox" name="q8" value="1"> Other</label><br>
+
+    <p>9. What cosmetics do you use?</p>
+    <label><input type="checkbox" name="q9" value="1"> Soap</label><br>
+    <label><input type="checkbox" name="q9" value="1"> Shampoo</label><br>
+    <label><input type="checkbox" name="q9" value="2"> Conditioner</label><br>
+    <label><input type="checkbox" name="q9" value="3"> Perfume</label><br>
+    <label><input type="checkbox" name="q9" value="2"> Deodorant</label><br>
+    <label><input type="checkbox" name="q9" value="3"> Shaving foam</label><br>
+    <label><input type="checkbox" name="q9" value="4"> Makeup cosmetics</label><br>
+    <label><input type="checkbox" name="q9" value="1"> Other</label><br>
+
+    <p>10. What cleaners do you use?</p>
+    <label><input type="checkbox" name="q10" value="1"> Utensils cleaning soap or liquid</label><br>
+    <label><input type="checkbox" name="q10" value="1"> Detergents</label><br>
+    <label><input type="checkbox" name="q10" value="2"> Floor cleaner</label><br>
+    <label><input type="checkbox" name="q10" value="2"> Bathroom cleaner</label><br>
+    <label><input type="checkbox" name="q10" value="2"> Toilet cleaner</label><br>
+    <label><input type="checkbox" name="q10" value="3"> Bio enzymes</label><br>
+    <label><input type="checkbox" name="q10" value="1"> Other</label><br>
+
+    <p>11. Do you consume anything that grows in your balcony/garden/farm?</p>
+    <label><input type="radio" name="q11" value="5"> Yes</label><br>
+    <label><input type="radio" name="q11" value="0"> No</label><br>
+
+    <p>12. Anything else you would like to share about your lifestyle choices?</p>
+    <textarea name="comments" rows="4" cols="50"></textarea><br><br>
+
+    <input type="button" value="Calculate Score" onclick="calculateScore()">
+    <input type="submit" value="Submit">
+
+</form>
+
+</body>
+</html>
